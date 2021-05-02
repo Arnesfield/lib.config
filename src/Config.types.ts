@@ -14,7 +14,7 @@ export interface TypeMap {
  * The config schema.
  */
 export interface ConfigSchema {
-  [key: string]: keyof TypeMap;
+  readonly [key: string]: keyof TypeMap;
 }
 
 /**

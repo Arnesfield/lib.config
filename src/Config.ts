@@ -10,7 +10,7 @@ import {
 /**
  * Stores configuration.
  */
-export class Config<Schema extends ConfigSchema> {
+export class Config<Schema extends ConfigSchema = ConfigSchema> {
   /** Static reference to Config. */
   protected ['constructor']: typeof Config;
   private readonly args: readonly string[];
