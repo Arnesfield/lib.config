@@ -4,6 +4,8 @@
   "description": "For managing application configuration.",
   "main": "lib/index.js",
   "scripts": {
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "npm run lint -- --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
