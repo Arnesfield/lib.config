@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "description": "For managing application configuration.",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prebuild": "rimraf lib",
+    "postinstall": "npm run --silent build",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "npm run lint -- --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
