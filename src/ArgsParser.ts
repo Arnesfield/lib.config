@@ -26,8 +26,12 @@ export class ArgsParser {
    * @returns The option index.
    */
   getIndex(key: string): number {
-    // no trim
-    return this.args.findIndex((arg: string) => arg === this.prefix + key);
+    const { args, prefix } = this;
+    return args.findIndex((arg: string) => {
+      // match exact `--option` or `--option=*`
+      const option: string = prefix + key;
+      return arg === option || arg.startsWith(option + '=');
+    });
   }
 
   /**
