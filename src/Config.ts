@@ -78,6 +78,12 @@ export class Config<Schema extends ConfigSchema = ConfigSchema> {
   }
 
   /**
+   * Get the config data.
+   * @returns The config data.
+   */
+  get(): ConfigData<Schema>;
+
+  /**
    * Get the config value by key.
    * @param key The config key.
    * @param defaultValue The config default value.
@@ -89,7 +95,18 @@ export class Config<Schema extends ConfigSchema = ConfigSchema> {
   >(
     key: Key,
     defaultValue?: DefaultValue
-  ): ConfigValue<Schema, Key, DefaultValue> {
+  ): ConfigValue<Schema, Key, DefaultValue>;
+
+  get<
+    Key extends keyof Schema,
+    DefaultValue extends ConfigValue<Schema, Key> = undefined
+  >(
+    key?: Key,
+    defaultValue?: DefaultValue
+  ): ConfigData<Schema> | ConfigValue<Schema, Key, DefaultValue> {
+    if (typeof key === 'undefined') {
+      return { ...this.data };
+    }
     const data: ConfigValue<Schema, Key> | undefined = this.data[key];
     const val: ConfigValue<Schema, Key> =
       typeof data === 'undefined' && typeof defaultValue !== 'undefined'
@@ -97,6 +114,13 @@ export class Config<Schema extends ConfigSchema = ConfigSchema> {
         : data;
     return val as ConfigValue<Schema, Key, DefaultValue>;
   }
+
+  /**
+   * Set the config data.
+   * @param data The config data.
+   * @returns The Config object.
+   */
+  set(data: ConfigData<Schema>): this;
 
   /**
    * Set the config value by key.
@@ -107,8 +131,30 @@ export class Config<Schema extends ConfigSchema = ConfigSchema> {
   set<Key extends keyof Schema>(
     key: Key,
     value: ConfigValue<Schema, Key>
+  ): this;
+
+  set<Key extends keyof Schema>(
+    dataOrKey: ConfigData<Schema> | Key,
+    value?: ConfigValue<Schema, Key>
   ): this {
-    this.data[key] = value;
+    const { data } = this;
+    if (typeof dataOrKey === 'object') {
+      Object.assign(data, dataOrKey);
+    } else {
+      data[dataOrKey] = value;
+    }
+    return this;
+  }
+
+  /**
+   * Clears all config data.
+   * @returns The Config object.
+   */
+  clear(): this {
+    const { data } = this;
+    for (const key in data) {
+      data[key] = undefined;
+    }
     return this;
   }
 }

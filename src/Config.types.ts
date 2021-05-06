@@ -38,17 +38,13 @@ export interface ConfigOptions<Schema extends ConfigSchema> {
 /**
  * The Config data.
  * @template Schema The schema type.
- * @template Key The key of schema.
  */
-export type ConfigData<
-  Schema extends ConfigSchema,
-  Key extends keyof Schema = keyof Schema
-> = {
-  -readonly [key in Key]?: TypeMap[Schema[key]];
+export type ConfigData<Schema extends ConfigSchema> = {
+  -readonly [key in keyof Schema]?: TypeMap[Schema[key]];
 };
 
 /**
- * The Config value. Becomes `undefined` if `defaultValue` is not set.
+ * The Config value. Type `undefined` is added if `defaultValue` is not set.
  * @template Schema The schema type.
  * @template Key The key of schema.
  * @template DefaultValue The default value type.
@@ -56,7 +52,7 @@ export type ConfigData<
 export type ConfigValue<
   Schema extends ConfigSchema,
   Key extends keyof Schema = keyof Schema,
-  DefaultValue extends ConfigData<Schema, Key>[Key] = undefined
+  DefaultValue extends ConfigData<Schema>[Key] = undefined
 > = DefaultValue extends undefined
-  ? ConfigData<Schema, Key>[Key]
-  : Exclude<ConfigData<Schema, Key>[Key], undefined>;
+  ? ConfigData<Schema>[Key]
+  : Exclude<ConfigData<Schema>[Key], undefined>;
